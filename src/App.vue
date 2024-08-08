@@ -28,15 +28,22 @@
         <hr class="w-[32.5rem] mt-4 border border-Light-ColorPrimary opacity-70" />
       </div>
     </div>
+    <button @click="showModal = true" class="absolute left-[76%] top-[86%]"><img src="./assets/Add button.svg"
+        class="w-auto h-[3.5rem]" /></button>
+    <Modal :visible="showModal" @close="showModal = false" @apply="addTask"></Modal>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import Input from './components/Input.vue';
 import ThemeSwitch from './components/ThemeSwitch.vue'
+import Modal from './components/Modal.vue';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { db } from './firebaseConfig';
 
 const isDarkMode = ref(false);
+const showModal = ref(false);
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
@@ -55,30 +62,45 @@ watch(isDarkMode, (newValue) => {
 }, { immediate: true });
 
 interface Task {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 }
 
 const Tasks = ref<Task[]>([
-  {
-    id: 1,
-    title: 'Estudar TypeScript',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Estudar JavaScript',
-    completed: false,
-  },
 ]);
 
-const toggleTask = (taskId: number) => {
+onMounted(async () => {
+  await fetchTasks();
+});
+
+async function fetchTasks() {
+  const querySnapshot = await getDocs(collection(db, 'Tasks'));
+  Tasks.value = querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as Task));
+}
+
+
+async function addTask(taskTitle: string) {
+  const docRef = await addDoc(collection(db, 'tasks'), {
+    title: taskTitle,
+    completed: false
+  });
+  Tasks.value.push({ id: docRef.id, title: taskTitle, completed: false });
+}
+
+async function toggleTask(taskId: string) {
   const task = Tasks.value.find(t => t.id === taskId);
   if (task) {
+    const taskRef = doc(db, 'tasks', taskId);
+    await updateDoc(taskRef, { completed: !task.completed });
     task.completed = !task.completed;
+  } else {
+    console.error("Tarefa não encontrada:", taskId);
   }
-};
+}
 </script>
 
 <style scoped>
