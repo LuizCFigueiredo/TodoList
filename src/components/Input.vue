@@ -1,35 +1,40 @@
 <template>
     <div class="relative">
-        <input :type="type" :id="id" :placeholder="placeholder" v-model="inputValue"
-            class="flex w-[37.188rem] h-[38px] p-2 items-center gap-[27.25rem] border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded placeholder:text-[#C3C1E5] dark:placeholder:text-Dark-Place dark:bg-transparent">
+        <input :type="type" :id="id" :placeholder="placeholder" v-model="inputValue" @input="handleInput"
+            class="flex w-[37.188rem] h-[38px] p-2 items-center gap-[27.25rem] border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded placeholder:text-[#C3C1E5] dark:placeholder:text-Dark-Place bg-transparent dark:bg-transparent" />
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, PropType, defineEmits } from 'vue';
 
 export default defineComponent({
     props: {
         id: {
-            type: String,
-            required:
-                true
+            type: String as PropType<string>,
+            required: true
         },
         type: {
-            type: String,
+            type: String as PropType<string>,
             default: 'text'
         },
         placeholder: {
-            type: String,
-            default:
-                ''
+            type: String as PropType<string>,
+            default: ''
+        },
+        modelValue: {
+            type: String as PropType<string>,
+            default: ''
         }
     },
+    emits: ['update:modelValue'],
     setup(props, { emit }) {
-        const inputValue = ref('');
+        const inputValue = ref(props.modelValue);
 
-        const handleInput = () => {
-            emit('input', inputValue.value);
+        const handleInput = (event: Event) => {
+            const target = event.target as HTMLInputElement;
+            inputValue.value = target.value;
+            emit('update:modelValue', inputValue.value);
         };
 
         return {
