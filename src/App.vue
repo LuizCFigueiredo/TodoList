@@ -47,7 +47,7 @@ import { ref, watch, onMounted } from 'vue';
 import Input from './components/Input.vue';
 import ThemeSwitch from './components/ThemeSwitch.vue'
 import Modal from './components/Modal.vue';
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { collection, deleteDoc, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import Editar from './assets/Editar.svg'
 import Lixo from './assets/Lixeiro.svg'
@@ -107,20 +107,27 @@ onMounted(async () => {
 });
 
 async function fetchTasks() {
-  const querySnapshot = await getDocs(collection(db, 'Tasks'));
-  Tasks.value = querySnapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  } as Task));
+  const q = query(collection(db, 'tasks'), orderBy('createdAt', 'desc'));
+  onSnapshot(q, (querySnapshot) => {
+    Tasks.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as Task[];
+  });
 }
 
 
 async function addTask(taskTitle: string) {
-  const docRef = await addDoc(collection(db, 'tasks'), {
-    title: taskTitle,
-    completed: false
-  });
-  Tasks.value.push({ id: docRef.id, title: taskTitle, completed: false });
+  try {
+    const docRef = await addDoc(collection(db, 'tasks'), {
+      title: taskTitle,
+      completed: false,
+      createdAt: serverTimestamp(),
+    });
+    Tasks.value.push({ id: docRef.id, title: taskTitle, completed: false });
+  } catch (error) {
+    console.error("Erro ao adicionar tarefa:", error);
+  }
 }
 
 const openAddModal = () => {
@@ -164,9 +171,14 @@ const deleteTask = async (taskId: string) => {
 
 
 async function removeTask(taskId: string) {
-  const taskRef = doc(db, 'tasks', taskId);
-  await deleteDoc(taskRef);
-  Tasks.value = Tasks.value.filter(task => task.id !== taskId);
+  try {
+    const taskRef = doc(db, 'tasks', taskId);
+    await deleteDoc(taskRef);
+    Tasks.value = Tasks.value.filter(task => task.id !== taskId);
+  } catch (error) {
+    console.error("Erro ao excluir tarefa:", error);
+    // Lide com o erro de forma apropriada
+  }
 }
 
 async function editTask(taskId: string, newTitle: string) {
@@ -183,7 +195,6 @@ async function toggleTask(taskId: string) {
   if (task) {
     const taskRef = doc(db, 'tasks', taskId);
     await updateDoc(taskRef, { completed: !task.completed });
-    task.completed = !task.completed;
   } else {
     console.error("Tarefa não encontrada:", taskId);
   }
