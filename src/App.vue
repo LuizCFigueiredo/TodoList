@@ -20,20 +20,25 @@
     </div>
     <div class="mt-8">
       <div v-for="task in filteredTasks" :key="task.id" :class="{ 'completed': task.completed }">
-        <div class="flex items-center gap-4 mt-4">
-          <input type="checkbox" :id="'checkbox-' + task.id" class="InputCheck" :checked="task.completed"
-            @change="toggleTask(task.id)" />
-          <h2 class="task-title text-xl text-Light-TextColor dark:text-Dark-TextColor dark:opacity-100 opacity-50">{{
-            task.title }}</h2>
-          <button><img :src="Editar"></button>
-          <button><img :src="Lixo"></button>
+        <div class="flex items-center justify-between mt-4">
+          <div class="flex gap-4">
+            <input type="checkbox" :id="'checkbox-' + task.id" class="InputCheck" :checked="task.completed"
+              @change="toggleTask(task.id)" />
+            <h2 class="task-title text-xl text-Light-TextColor dark:text-Dark-TextColor dark:opacity-100 opacity-50">{{
+              task.title }}</h2>
+          </div>
+          <div class="flex items-center gap-[6px] pt-2">
+            <button @click="openEditModal(task)"><img :src="Editar"></button>
+            <button @click="openDeleteModal(task)"><img :src="Lixo"></button>
+          </div>
         </div>
         <hr class="w-[32.5rem] mt-4 border border-Light-ColorPrimary opacity-70" />
       </div>
     </div>
-    <button @click="showModal = true" class="absolute left-[76%] top-[86%]"><img src="./assets/Add button.svg"
+    <button @click="openAddModal" class="absolute left-[76%] top-[86%]"><img src="./assets/Add button.svg"
         class="w-auto h-[3.5rem]" /></button>
-    <Modal :visible="showModal" @close="showModal = false" @apply="addTask"></Modal>
+    <Modal :visible="showModal" :title="modalTitle" :action="modalAction" :task="selectedTask" @close="closeModal"
+      @apply="handleApply" @delete="deleteTask" />
   </main>
 </template>
 
@@ -50,13 +55,18 @@ import { computed } from 'vue';
 
 
 const isDarkMode = ref(false);
-const showModal = ref(false);
 const filterTerm = ref('');
 const appliedFilterTerm = ref('');
+const showModal = ref(false);
+const modalTitle = ref('');
+const modalAction = ref('');
+const selectedTask = ref<Task | null>(null);
 
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value;
-};
+interface Task {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
 watch(isDarkMode, (newValue) => {
   if (newValue) {
@@ -70,11 +80,15 @@ watch(isDarkMode, (newValue) => {
   }
 }, { immediate: true });
 
-interface Task {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value;
+};
+
+watch(filterTerm, (newValue) => {
+  if (newValue === '') {
+    appliedFilterTerm.value = '';
+  }
+});
 
 const Tasks = ref<Task[]>([
 ]);
@@ -109,6 +123,61 @@ async function addTask(taskTitle: string) {
   Tasks.value.push({ id: docRef.id, title: taskTitle, completed: false });
 }
 
+const openAddModal = () => {
+  modalTitle.value = 'Add Task';
+  modalAction.value = 'add';
+  selectedTask.value = null;
+  showModal.value = true;
+};
+
+const openEditModal = (task: { id: string, title: string, completed: boolean }) => {
+  modalTitle.value = 'Editar Task';
+  modalAction.value = 'edit';
+  selectedTask.value = task;
+  showModal.value = true;
+};
+
+const openDeleteModal = (task: { id: string, title: string, completed: boolean }) => {
+  modalTitle.value = 'Apagar Task';
+  modalAction.value = 'delete';
+  selectedTask.value = task;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const handleApply = async ({ id, title }: { id: string, title: string }) => {
+  if (modalAction.value === 'add') {
+    await addTask(title);
+  } else if (modalAction.value === 'edit') {
+    await editTask(id, title);
+  }
+  closeModal();
+};
+
+const deleteTask = async (taskId: string) => {
+  await removeTask(taskId);
+  closeModal();
+};
+
+
+async function removeTask(taskId: string) {
+  const taskRef = doc(db, 'tasks', taskId);
+  await deleteDoc(taskRef);
+  Tasks.value = Tasks.value.filter(task => task.id !== taskId);
+}
+
+async function editTask(taskId: string, newTitle: string) {
+  const taskRef = doc(db, 'tasks', taskId);
+  await updateDoc(taskRef, { title: newTitle });
+  const task = Tasks.value.find(task => task.id === taskId);
+  if (task) {
+    task.title = newTitle;
+  }
+}
+
 async function toggleTask(taskId: string) {
   const task = Tasks.value.find(t => t.id === taskId);
   if (task) {
@@ -121,9 +190,7 @@ async function toggleTask(taskId: string) {
 }
 
 const applyFilter = () => {
-  if (appliedFilterTerm.value !== filterTerm.value) {
-    appliedFilterTerm.value = filterTerm.value;
-  }
+  appliedFilterTerm.value = filterTerm.value;
 };
 </script>
 
