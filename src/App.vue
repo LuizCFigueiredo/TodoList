@@ -48,7 +48,7 @@ import Input from './components/Input.vue';
 import ThemeSwitch from './components/ThemeSwitch.vue'
 import Modal from './components/Modal.vue';
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
-import { db } from './firebaseConfig';
+import { db } from '../firebaseConfig';
 import Editar from './assets/Editar.svg'
 import Lixo from './assets/Lixeiro.svg'
 import { computed } from 'vue';
