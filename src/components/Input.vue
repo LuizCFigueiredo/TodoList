@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, defineEmits } from 'vue';
+import { defineComponent, ref, PropType } from 'vue';
 
 export default defineComponent({
     props: {
