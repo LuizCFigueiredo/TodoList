@@ -1,7 +1,6 @@
 <template>
-    <div class="relative">
-        <input :type="type" :id="id" :placeholder="placeholder" v-model="inputValue" @input="handleInput"
-            class="flex w-[37.188rem] h-[38px] p-2 items-center gap-[27.25rem] border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded placeholder:text-[#C3C1E5] dark:placeholder:text-Dark-Place bg-transparent dark:bg-transparent" />
+    <div><input :type="type" :id="id" :placeholder="placeholder" v-model="inputValue" @input="handleInput"
+            class="flex w-[37.188rem] h-[38px] p-2 items-center  border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded placeholder:text-[#C3C1E5] dark:placeholder:text-Dark-Place bg-transparent dark:bg-transparent" />
     </div>
 </template>
 

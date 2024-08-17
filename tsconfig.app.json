@@ -18,10 +18,11 @@
     "jsx": "preserve",
 
     /* Linting */
+    "types": ["vite/client"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tailwind.config.ts", "firebaseConfig.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue", "tailwind.config.ts", "firebaseConfig.ts"]
 }
