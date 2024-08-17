@@ -15,7 +15,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, next) => {
   const auth = getAuth();
   const user = auth.currentUser;
 

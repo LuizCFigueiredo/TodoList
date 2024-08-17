@@ -50,7 +50,7 @@ import Input from '../components/Input.vue';
 import ThemeSwitch from '../components/ThemeSwitch.vue'
 import Modal from '../components/Modal.vue'
 import { getAuth } from 'firebase/auth';
-import { collection, deleteDoc, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, where } from 'firebase/firestore';
+import { collection, deleteDoc, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import Editar from '../assets/Editar.svg'
 import Lixo from '../assets/Lixeiro.svg'
