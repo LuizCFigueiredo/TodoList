@@ -5,7 +5,12 @@
             <form class="flex flex-col gap-3 z-10" @submit.prevent="login">
                 <InputLogin id="Email" label="Email" type="email" placeholder="Email" required v-model="email" />
                 <InputLogin id="Senha" label="Senha" type="password" placeholder="Senha" required v-model="senha" />
-                <button type="submit" class="w-32 border border-Light-ColorPrimary rounded-md">Fazer Login</button>
+                <div class="flex gap-2">
+                    <button type="submit" class="w-32 border border-Light-ColorPrimary rounded-md">Fazer Login</button>
+                    <button class="w-32 border border-Light-ColorPrimary rounded-md"
+                        @click.prevent="navigateToRegister">Não
+                        tenho conta</button>
+                </div>
             </form>
         </div>
         <div class="bg-[#B0B1D5] flex-[1] shadow-[-3px_1px_2px_rgba(0,0,0,0.35)]">
@@ -51,10 +56,15 @@ export default {
             }
         };
 
+        const navigateToRegister = () => {
+            router.push('/register');
+        };
+
         return {
             email,
             senha,
             login,
+            navigateToRegister,
         };
     },
 };

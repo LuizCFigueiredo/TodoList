@@ -7,7 +7,7 @@
                 <InputLogin id="Nome" label="Nome" type="text" placeholder="Nome" required v-model="nome" />
                 <InputLogin id="Email" label="Email" type="email" placeholder="Email" required v-model="email" />
                 <InputLogin id="Senha" label="Senha" type="password" placeholder="Senha" required v-model="senha" />
-                <div>
+                <div class="flex gap-2">
                     <button type="submit" @click="register"
                         class="w-32 border border-Light-ColorPrimary rounded-md">Registrar</button>
                     <button class="w-32 border border-Light-ColorPrimary rounded-md"
