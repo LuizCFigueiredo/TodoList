@@ -19,22 +19,28 @@
             <ThemeSwitch @toggle-dark-mode="toggleDarkMode" />
         </div>
         <div class="mt-8">
-            <div v-for="task in filteredTasks" :key="task.id" :class="{ 'completed': task.completed }">
-                <div class="flex items-center justify-between mt-4">
-                    <div class="flex gap-4">
-                        <input type="checkbox" :id="'checkbox-' + task.id" class="InputCheck" :checked="task.completed"
-                            @change="toggleTask(task.id)" />
-                        <h2
-                            class="task-title text-xl text-Light-TextColor dark:text-Dark-TextColor dark:opacity-100 opacity-50">
-                            {{
-                                task.title }}</h2>
+            <div v-if="filteredTasks.length > 0">
+                <div v-for="task in filteredTasks" :key="task.id" :class="{ 'completed': task.completed }">
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex gap-4">
+                            <input type="checkbox" :id="'checkbox-' + task.id" class="InputCheck"
+                                :checked="task.completed" @change="toggleTask(task.id)" />
+                            <h2
+                                class="task-title text-xl text-Light-TextColor dark:text-Dark-TextColor dark:opacity-100 opacity-50">
+                                {{
+                                    task.title }}</h2>
+                        </div>
+                        <div class="flex items-center gap-[6px] pt-2">
+                            <button @click="openEditModal(task)"><img :src="Editar"></button>
+                            <button @click="openDeleteModal(task)"><img :src="Lixo"></button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-[6px] pt-2">
-                        <button @click="openEditModal(task)"><img :src="Editar"></button>
-                        <button @click="openDeleteModal(task)"><img :src="Lixo"></button>
-                    </div>
+                    <hr class="w-[32.5rem] mt-4 border border-Light-ColorPrimary opacity-70" />
                 </div>
-                <hr class="w-[32.5rem] mt-4 border border-Light-ColorPrimary opacity-70" />
+            </div>
+            <div v-else>
+                <img :src="Empty" class="w-[150px] h-auto" />
+                <p class="text-Light-TextColor dark:text-Dark-TextColor text-xl text-center mt-2">Empty</p>
             </div>
         </div>
         <button @click="openAddModal" class="absolute left-[76%] top-[86%]"><img src="../assets/Add button.svg"
@@ -54,6 +60,7 @@ import { collection, deleteDoc, addDoc, updateDoc, doc, onSnapshot, query, order
 import { db } from '../../firebaseConfig';
 import Editar from '../assets/Editar.svg'
 import Lixo from '../assets/Lixeiro.svg'
+import Empty from '../assets/empty.svg'
 import { computed } from 'vue';
 
 

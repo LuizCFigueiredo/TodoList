@@ -1,13 +1,13 @@
 <template>
     <div v-if="visible" class="z-50 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div class="w-[28rem] h-72 bg-white dark:bg-[#B0B1D5] pt-5 p-8 rounded-lg">
+        <div class="w-auto h-auto bg-white dark:bg-[#B0B1D5] pt-5 p-8 rounded-lg">
             <h2 class="text-xl text-center text-Light-TextColor dark:text-Dark-ColorPrimary font-bold">{{ title }}</h2>
             <div v-if="action !== 'delete'" class="mt-6">
                 <input v-model="taskTitle" type="text" placeholder="Digite sua nota..."
                     class="w-full dark:bg-transparent p-2 border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded-md placeholder:text-Light-Place dark:placeholder:text-Dark-Place dark:placeholder:opacity-70" />
                 <small class="text-Light-TextColor">{{ errors }}</small>
             </div>
-            <div class="flex justify-between mt-20">
+            <div class="flex justify-between mt-20 gap-5">
                 <button @click="close"
                     class="px-4 py-2 border border-Light-ColorPrimary text-Light-ColorPrimary rounded-md">CANCEL</button>
                 <button @click="applyAction" class="px-4 py-2 bg-Light-ColorPrimary text-white rounded-md">

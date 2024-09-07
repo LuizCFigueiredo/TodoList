@@ -8,8 +8,7 @@
                 <div class="flex gap-2">
                     <button type="submit" class="w-32 border border-Light-ColorPrimary rounded-md">Fazer Login</button>
                     <button class="w-32 border border-Light-ColorPrimary rounded-md"
-                        @click.prevent="navigateToRegister">Não
-                        tenho conta</button>
+                        @click.prevent="navigateToRegister">Criar conta</button>
                 </div>
             </form>
         </div>
