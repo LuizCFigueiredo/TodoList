@@ -1,11 +1,11 @@
 <template>
   <div class="relative">
-    <label v-if="label" :for="id" class="block mb-1 text-sm font-medium text-Dark-BackgroundColor dark:text-white">{{
+    <label v-if="label" :for="id" class="block mb-1 text-sm font-medium text-[#F3F3F3] dark:text-white">{{
       label
-      }}</label>
+    }}</label>
     <div class="relative">
       <input :type="computedType" :id="id" :placeholder="placeholder" v-model="inputValue" @input="handleInput"
-        class="flex w-64 pl-2 items-center border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded-md placeholder:text-[#C3C1E5] dark:placeholder:text-Dark-Place bg-transparent dark:bg-transparent"
+        class="flex w-64 pl-2 items-center border border-Light-ColorPrimary dark:border-Dark-ColorPrimary rounded-md placeholder:text-[#EBE9FD] bg-transparent dark:bg-transparent"
         :class="{ 'border-red-500': error }" />
       <span v-if="type === 'password'" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
         @click="togglePasswordVisibility">

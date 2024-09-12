@@ -1,32 +1,19 @@
 <template>
-    <main class="h-full flex flex-row bg-Light-BackgroundColor">
-        <div class="flex flex-col flex-[2] items-center justify-center">
-            <h1 class="text-center text-Light-TextColor">Novo
-                membro <br /><small class="text-Dark-BackgroundColor text-start">Registro</small> </h1>
-            <form class="flex flex-col gap-3  z-10" @submit.prevent="register">
+    <main class="h-full flex flex-col items-center justify-center bg-[#B0B1D5]">
+        <div
+            class="flex flex-col items-center justify-center h-96 w-96 bg-gradient-to-r from-[#B0B1D5]/20 via-[#52616B]/05 to-[#B0B1D5]/20 bg-opacity-50 border border-[#f3f7fa] border-opacity-50 rounded shadow-lg">
+            <h1 class="text-center text-[#f3f7fa]">Registrar</h1>
+            <form class="flex flex-col gap-3 z-10" @submit.prevent="register">
                 <InputLogin id="Nome" label="Nome" type="text" placeholder="Nome" required v-model="nome" />
-                <InputLogin id="Email" label="Email" type="email" placeholder="Email" required v-model="email" />
-                <InputLogin id="Senha" label="Senha" type="password" placeholder="Senha" required v-model="senha" />
-                <div class="flex gap-2">
-                    <button type="submit" @click="register"
-                        class="w-32 border border-Light-ColorPrimary rounded-md">Registrar</button>
-                    <button class="w-32 border border-Light-ColorPrimary rounded-md"
-                        @click.prevent="navigateToLogin">Fazer
-                        Login</button>
-                </div>
+                <InputLogin id="Email" label="Email" type="email" placeholder="Email..." required v-model="email" />
+                <InputLogin id="Senha" label="Senha" type="password" placeholder="Senha..." required v-model="senha" />
+                <button type="submit" @click="register"
+                    class="w-32 border border-Light-ColorPrimary rounded-md text-[#EBE9FD]">Fazer
+                    Login</button>
+                <small>já tem conta? <small @click.prevent="navigateToLogin" class="cursor-pointer">CLIQUE
+                        AQUI</small></small>
             </form>
         </div>
-        <div class="bg-[#B0B1D5] flex-[1] shadow-[-3px_1px_2px_rgba(0,0,0,0.35)]">
-            <div class="relative right-40 top-[4.5rem] drop-shadow-xl">
-                <img src="../assets/LoginFoto.png" alt="Login foto"
-                    class="filter drop-shadow-[-4px_8px_4px_rgba(0,0,0,0.35)] absolute">
-            </div>
-        </div>
-        <div class="ilustracao-container absolute bottom-0 left-0 z-1">
-            <img src="../assets/Teste.svg" alt="Ilustração"
-                class="filter drop-shadow-[3px_-1px_2px_rgba(0,0,0,0.35)] w-[60%]">
-        </div>
-
     </main>
 
 </template>
